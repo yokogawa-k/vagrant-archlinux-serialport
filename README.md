@@ -1,4 +1,4 @@
-# VritualBox でシリアルポートを使う場合 Vagrant にどのように設定すべきかのメモ
+# Vagrant(vbox) でシリアルポートを使う場合にどのように設定すべきかのメモ
 
 ## 環境
 
@@ -10,7 +10,7 @@
 
 このレポジトリを clone した環境で `vagrant up` する。
 
-systemd から ttyS0 をオープンする agetty のインスタンスが上がるように設定する。
+systemd から `ttyS0` をオープンする agetty のインスタンスが上がるように設定する。
 
 ```console
 $ sudo -i
@@ -19,7 +19,7 @@ $ sudo -i
 # systemctl start getty@ttyS0.service
 ```
 
-ホストや外部マシンからつなぐ
+ホストや外部マシンからつなぐ。
 
 ```console
 host:~$ socat -d -d - tcp:localhost:9999
@@ -29,14 +29,14 @@ host:~$ socat -d -d - tcp:localhost:9999
 
 ### tcp 以外を使う方法
 
-[vbomanage のマニュアル](https://www.virtualbox.org/manual/ch08.html#vboxmanage-modifyvm-other) を参考にパラメータを変更すればよい。named pipe や、ホストのデバイス経由でつなぐことが出来るはず。
+[vboxmanage のマニュアル](https://www.virtualbox.org/manual/ch08.html#vboxmanage-modifyvm-other) を参考にパラメータを変更すればよい。設定によっては、named pipe やホストのデバイス経由でつなぐことが出来るはず。
 
 ### エコーバックとか
 
-どうしても気になるなら、socat で pty を生成し、tcp なり pipe なりから繋いであげる。その pty に screen で接続する。
+どうしても気になるなら、socat で pty を生成し、tcp なり pipe なりから繋いであげる。そして、pty に screen で接続するとうまくやってくれるらしい。
 
-参考サイト:
-- [VirtualBox / VMware Player のシリアルコンソールを使う - Qiita](http://qiita.com/albatross/items/8404215ada12f562fe35)
+参考サイト
+- [VirtualBox / VMware Player のシリアルコンソールを使う - Qiita](http://qiita.com/albatross/items/8404215ada12f562fe35#2-6)
 - [socat を使う (シリアル-TCP変換, etc.) [MA-E/SA Developers' Wiki]](http://ma-tech.centurysys.jp/doku.php?id=mae3xx_tips:use_socat:start)
 
 エコーバックは socat 単体でも回避できそうな気がするが調べてないので不明
